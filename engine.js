@@ -3,6 +3,7 @@
 var deck=document.getElementById('deck'),body=document.body;
 var cur=0,curF=0,total=SLIDES.length;
 var fragState=[];// remember fragment index per slide
+var visited=[];
 
 // ═══ SVG ICONS ═══
 var ICONS={
@@ -113,37 +114,36 @@ function buildSplit(b){
   return '<div class="glass"><h3>'+(ICONS[b.icon]?'<span style="display:inline-block;width:20px;height:20px;vertical-align:middle;margin-right:6px">'+ICONS[b.icon]+'</span>':'')+b.head+'</h3><ul>'+b.items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>'+(b.anti?'<div class="s-anti">'+b.anti+'</div>':'')+'</div>';
 }
 
-// ═══ NAVIGATION — KEYS ONLY, STATE MEMORY ═══
+// ═══ NAVIGATION — PPT-STYLE BACK/FORWARD ═══
 function setAccent(idx){
   var ac=SLIDES[idx].accent||'indigo';
   body.className='accent-'+ac;
 }
 
-function showSlide(idx,restoreState){
+// showSlide: mode='fresh' (reset frags + auto-reveal first), 'restore' (restore saved frag state)
+function showSlide(idx,mode){
   if(idx<0||idx>=total) return;
   var prev=document.getElementById('s'+cur);
   var next=document.getElementById('s'+idx);
-  // Save current fragment state before leaving
-  fragState[cur]=curF;
-  if(prev) prev.classList.remove('active');
+  if(prev){
+    fragState[cur]=curF;
+    prev.classList.remove('active');
+  }
   cur=idx;
+  visited[idx]=true;
   setAccent(idx);
   var frags=next.querySelectorAll('.frag');
-  if(restoreState&&fragState[idx]>0){
-    // Restore: show all fragments up to saved state instantly
-    curF=fragState[idx];
-    for(var i=0;i<frags.length;i++){
-      if(i<curF) frags[i].classList.add('vis');
-      else frags[i].classList.remove('vis');
-    }
+  var saved=Math.max(0,Math.min(fragState[idx]||0,frags.length));
+  curF=0;
+  for(var i=0;i<frags.length;i++) frags[i].classList.remove('vis');
+  if(mode==='restore'){
+    curF=saved;
+    for(var j=0;j<saved;j++) frags[j].classList.add('vis');
   }else{
-    // Fresh: hide all, then reveal first
-    curF=0;
-    for(var i=0;i<frags.length;i++) frags[i].classList.remove('vis');
+    setTimeout(revealNext,250);
   }
   next.classList.add('active');
   next.scrollTop=0;
-  if(!restoreState||curF===0) setTimeout(revealNext,250);
   updateUI();
 }
 
@@ -158,10 +158,27 @@ function revealNext(){
   return false;
 }
 
-function advance(){if(!revealNext()&&cur<total-1) showSlide(cur+1,false);}
-function goBack(){
-  if(cur>0) showSlide(cur-1,true);// restore previous slide's state
+function unrevealLast(){
+  var sl=document.getElementById('s'+cur);
+  var frags=sl.querySelectorAll('.frag');
+  if(curF>0){
+    curF--;
+    frags[curF].classList.remove('vis');
+    fragState[cur]=curF;
+    updateUI();return true;
+  }
+  return false;
 }
+
+// ArrowRight: reveal next frag → if all shown, next slide
+function advance(){
+  if(!revealNext()&&cur<total-1){
+    var nextIdx=cur+1;
+    showSlide(nextIdx,visited[nextIdx]?'restore':'fresh');
+  }
+}
+// ArrowLeft: un-reveal last frag → if none left, prev slide restored to last state
+function goBack(){if(!unrevealLast()&&cur>0) showSlide(cur-1,'restore');}
 
 function updateUI(){
   var sl=document.getElementById('s'+cur);
@@ -203,7 +220,7 @@ function endMorph(){
   overlay.classList.add('hide');
   setTimeout(function(){
     overlay.style.display='none';
-    showSlide(0,false);
+    showSlide(0,'fresh');
     // Auto fullscreen after morph ends (user gesture required for some browsers)
     tryFullscreen();
   },800);
@@ -258,6 +275,6 @@ if(overlay&&!morphPlayed){
 }else{
   // Morph already played or no overlay
   if(overlay) overlay.style.display='none';
-  showSlide(0,false);
+  showSlide(0,'fresh');
 }
 })();
