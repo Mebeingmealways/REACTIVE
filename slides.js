@@ -115,4 +115,11 @@ window.SLIDES=[
   {t:'list',c:['Akka actor model handles all concurrency — no thread locks ever written','Business logic actors run concurrently by default','Clear per-actor data ownership simplifies ISO 27001 privacy compliance','Stack: Akka (Scala) · LevelDB persistence · Single VM, cluster-ready if needed']},
   {t:'highlight',c:'Reactive isn\'t only for Netflix-scale. A solo developer ran a production SaaS for 8 years with zero downtime using the same principles.'},
 ]},
+
+// ── 11: THANK YOU ──
+{ accent:'indigo', fragments:[
+  {t:'typewriter',c:'Thank You.'},
+  {t:'sub',c:'Aaryan Choudhary · 23UCSE4002 · MBM University, Jodhpur'},
+  {t:'pills',c:['RESPONSIVE','RESILIENT','ELASTIC','MESSAGE-DRIVEN']},
+]},
 ];

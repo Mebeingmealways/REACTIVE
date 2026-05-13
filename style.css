@@ -18,7 +18,9 @@ body{background:#f4f1ec;color:#2d2b2e}
 
 /* SLIDE CONTAINER */
 #deck{position:relative;width:100vw;height:100vh;overflow:hidden}
-.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:5vh 6vw;opacity:0;overflow-y:auto}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:4vh 5vw;opacity:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.slide::-webkit-scrollbar{display:none}
+.slide>*{max-width:100%;flex-shrink:0}
 .slide.active{display:flex;opacity:1;animation:fadeSlideIn .5s ease both}
 @keyframes fadeSlideIn{from{opacity:0;transform:translateX(3%)}to{opacity:1;transform:translateX(0)}}
 
@@ -195,6 +197,17 @@ body{background:#f4f1ec;color:#2d2b2e}
 .dia-scale .bar.b5{height:90px;background:linear-gradient(180deg,#67e8f9,#06b6d4)}
 .dia-scale .bar-label{font-size:.5rem;color:rgba(0,0,0,.3);margin-top:4px;text-align:center;writing-mode:horizontal-tb}
 
+/* TYPEWRITER */
+.tw-wrap{display:flex;align-items:center;justify-content:center;min-height:40vh}
+.tw-text{font-size:clamp(3rem,8vw,6rem);font-weight:900;color:#111118;letter-spacing:-.03em;border-right:3px solid #6366f1;white-space:nowrap;overflow:hidden;width:0;animation:twType 1.8s steps(11) .5s forwards,twBlink .6s step-end infinite}
+@keyframes twType{from{width:0}to{width:11ch}}
+@keyframes twBlink{50%{border-color:transparent}}
+
+/* DOWNLOAD BUTTON */
+#dlBtn{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:99;background:rgba(255,255,255,.5);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,.06);border-radius:10px;padding:8px 14px;cursor:pointer;display:flex;align-items:center;gap:6px;font:500 .65rem 'Inter',sans-serif;color:rgba(0,0,0,.4);transition:all .3s;text-decoration:none}
+#dlBtn:hover{background:rgba(99,102,241,.08);color:#6366f1;border-color:rgba(99,102,241,.2)}
+#dlBtn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
 /* RESPONSIVE */
-@media(max-width:900px){.slide{padding:4vh 5vw}.dia-diamond{width:260px;height:220px}}
-@media(max-width:600px){.slide{padding:3vh 4vw}.s-h1{font-size:1.6rem}.stat-row{gap:8px}.dia-flow{flex-direction:column}.dia-flow .f-arrow{transform:rotate(90deg)}}
+@media(max-width:900px){.slide{padding:3vh 4vw}.dia-diamond{width:260px;height:220px}}
+@media(max-width:600px){.slide{padding:2vh 3vw}.s-h1{font-size:1.6rem}.stat-row{gap:8px}.dia-flow{flex-direction:column}.dia-flow .f-arrow{transform:rotate(90deg)}}
