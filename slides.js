@@ -19,7 +19,7 @@ window.SLIDES=[
     l:{head:'Then · Pre-2010',cls:'muted',items:['Seconds of latency acceptable','Gigabytes of data, few servers','Weekly or monthly releases','Blocking, thread-per-request I/O','Vertical scaling (bigger box)','Planned downtime windows']},
     r:{head:'Now · Post-2013',cls:'accent',items:['Millisecond response expected','Petabytes, always-on clusters','Continuous delivery pipelines','Non-blocking, async by default','Horizontal scaling (more nodes)','Downtime = revenue lost instantly']}
   }},
-  {t:'note',c:'Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson published the Reactive Manifesto v2.0 at QCon 2014, giving the industry a shared vocabulary.'},
+  {t:'note',c:'First published as The Reactive Manifesto (2014) by Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson at QCon — rooted in the Actor Model (Erlang/OTP, Akka) and Reactive Streams/back-pressure ideas.'},
 ]},
 
 // ── 3: FOUR TRAITS ──
